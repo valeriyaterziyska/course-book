@@ -1,21 +1,16 @@
 const express = require("express");
-const handlebars = require("express-handlebars");
+
+const configExpress = require("./config/configExpress");
+const configHandlebars = require("./config/configHandlebars");
 
 const routes = require("./routes");
 
 const app = express();
+const PORT = 5000;
 
-app.use(express.static("src/public"));
-app.use(express.urlencoded({ extended: false }));
+configExpress(app);
+configHandlebars(app);
+
 app.use(routes);
 
-app.engine(
-    "hbs",
-    handlebars.engine({
-        extname: "hbs",
-    })
-);
-
-app.set("view engine", "hbs");
-
-app.listen(5000, () => console.log(`App is listening on port 5000...`));
+app.listen(PORT, () => console.log(`App is listening on port ${PORT}...`));
