@@ -16,9 +16,16 @@ exports.authMiddleware = async (req, res, next) => {
         res.locals.user = decodedToken;
 
         next();
-
     } catch (error) {
         res.clearCookie("auth");
         res.redirect("/auth/login");
     }
+};
+
+exports.isAuth = (req, res, next) => {
+    if (!req.user) {
+        return res.redirect("/auth/login");
+    }
+
+    next();
 };
