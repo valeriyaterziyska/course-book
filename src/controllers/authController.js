@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
         res.cookie("auth", token);
         res.redirect("/");
     } catch (err) {
-        res.render("auth/register", { error: getErrorMessage(err) });
+        res.render("auth/login", { error: getErrorMessage(err) });
     }
 });
 
