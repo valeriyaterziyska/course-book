@@ -1,16 +1,18 @@
 const bcrypt = require("bcrypt");
+const jwt = require("../lib/jsonwebtoken");
 
 const User = require("../models/User");
+const SECRET = "SOMESECRETKEY";
 
 exports.register = (userData) => {
     if (userData.password !== userData.rePassword) {
-        throw new Error('Password missmatch!');
+        throw new Error("Password missmatch!");
     }
 
-    const user = User.find({email: userData.email});
+    const user = User.findOne({ email: userData.email });
 
-    if(user) {
-        throw new Error('User exists!');
+    if (user) {
+        throw new Error("User exists!");
     }
 
     return User.create(userData);
@@ -28,7 +30,13 @@ exports.login = async ({ email, password }) => {
         throw new Error("Invalid email or password");
     }
 
-    // Generate token
+    const payload = {
+        _id: user._id,
+        user: user.username,
+        email: user.email,
+    };
 
-    // return token
+    const token = await jwt.sign(payload, SECRET, { expiresIn: '2h' });
+
+    return token;
 };
